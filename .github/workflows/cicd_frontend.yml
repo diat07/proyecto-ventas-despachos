@@ -1,0 +1,8 @@
+name: CI/CD Pipeline - Innovatech frontend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'proyecto semestral/front_despacho/**'
