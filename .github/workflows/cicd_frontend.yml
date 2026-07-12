@@ -6,3 +6,57 @@ on:
       - main
     paths:
       - 'proyecto semestral/front_despacho/**'
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/LabRole
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      run: |
+        docker build -t $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_FRONTEND }}:${{ github.sha }} .
+        docker push $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_FRONTEND }}:${{ github.sha }}
+        echo "image=$ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_FRONTEND }}:${{ github.sha }}" >> $GITHUB_OUTPUT
+
+    
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v4
+      with:
+        version: 'v1.32.0' # Versión alineada con tu clúster
+
+    
+    - name: Update kubeconfig for EKS
+      run: |
+        aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name ${{ secrets.EKS_CLUSTER_NAME }}
+
+    # 7. Desplegar en EKS inyectando dinámicamente la nueva imagen en el archivo YAML
+    - name: Deploy to EKS
+      run: |
+        # Cambia dinámicamente la imagen en tu archivo deployment.yaml con la recién compilada
+        sed -i "s|image:.*|image: ${{ steps.build-image.outputs.image }}|g" deployment.yaml
+        
+        # Aplicar los cambios en el clúster
+        kubectl apply -f deployment.yaml
