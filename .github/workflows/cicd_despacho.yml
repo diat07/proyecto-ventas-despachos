@@ -31,7 +31,8 @@ jobs:
 
     - name: Build imagen Backend y push a ECR
       run: |
-        cd Springboot-API-REST-DESPACHO
+        
+        cd "proyecto semestral/back-Despachos_SpringBoot/Springboot-API-REST-DESPACHO"
         docker build -t backend-despacho .
         docker tag backend-despacho:latest ${{ secrets.ECR_REPOSITORY_DESPACHO }}:latest
         docker push ${{ secrets.ECR_REPOSITORY_DESPACHO }}:latest
