@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-ventas-service
+spec:
+  type: ClusterIP
+  selector:
+    app: backend-ventas-pod
+  ports:
+    - port: 8080
+      targetPort: 8080
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-ventas-pod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-ventas-pod
+  template:
+    metadata:
+      labels:
+        app: backend-ventas-pod
+    spec:
+      containers:
+        - name: backend-ventas-cont
+          image: 179885810108.dkr.ecr.us-east-1.amazonaws.com/tienda-backend-ventas:eks-v1
+          ports:
+            - containerPort: 8080
