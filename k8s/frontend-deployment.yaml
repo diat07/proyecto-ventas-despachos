@@ -27,5 +27,6 @@ spec:
       containers:
         - name: frontend-tienda-cont
           image: 179885810108.dkr.ecr.us-east-1.amazonaws.com/frontend_ventas
+          imagePullPolicy: Always
           ports:
             - containerPort: 5173
