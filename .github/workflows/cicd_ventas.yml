@@ -33,6 +33,6 @@ jobs:
       run: |
         
         cd "proyecto semestral/back-Ventas_SpringBoot/Springboot-API-REST"
-        docker build -t backend-despacho .
-        docker tag backend-despacho:latest ${{ secrets.ECR_REPOSITORY_VENTAS }}:latest
+        docker build -t backend-ventas .
+        docker tag backend-ventas:latest ${{ secrets.ECR_REPOSITORY_VENTAS }}:latest
         docker push ${{ secrets.ECR_REPOSITORY_VENTAS }}:latest
