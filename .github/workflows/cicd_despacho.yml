@@ -62,4 +62,5 @@ jobs:
           EKS_NAMESPACE: ${{ secrets.EKS_NAMESPACE }}
       run: |
         kubectl get pods -n $EKS_NAMESPACE
+        kubectl rollout restart Deployment/backend-despachos-pod
 
