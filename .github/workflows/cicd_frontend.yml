@@ -58,7 +58,7 @@ jobs:
       env:
           EKS_NAMESPACE: ${{ secrets.EKS_NAMESPACE }}
       run: |
-        kubectl apply -f k8s/cicd_frontend.yml -n $EKS_NAMESPACE
+        kubectl apply -f k8s/frontend-deployment.yml -n $EKS_NAMESPACE
     - name: EKS comprobacion
       env:
           EKS_NAMESPACE: ${{ secrets.EKS_NAMESPACE }}
