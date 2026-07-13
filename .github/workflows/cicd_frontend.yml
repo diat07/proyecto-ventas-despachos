@@ -39,8 +39,26 @@ jobs:
         docker build -t frontend-despacho .
         docker tag frontend-despacho:latest ${{ secrets.ECR_REPOSITORY_FRONTEND }}:latest
         docker push ${{ secrets.ECR_REPOSITORY_FRONTEND }}:latest
+
+    - name: Instalar kubectl
+      uses: azure/setup-kubectl@v4
+      with:
+        version: v1.29.0
+
+    - name: Configurar kubeconfig para EKS
+      env:
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+        EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
+      run: |
+        aws eks update-kubeconfig \
+          --region $AWS_REGION \
+          --name $EKS_CLUSTER_NAME
+        kubectl config current-context
+
     - name: despliegue a EKS
-      run: kubectl set image deployment/frontend-tienda-pod frontend-tienda-pod=frontend-despacho
+      env:
+          EKS_NAMESPACE: ${{ secrets.EKS_NAMESPACE }}
+      run: |
+        kubectl apply -f k8s/cicd_frontend.yml -n $EKS_NAMESPACE
     - name: EKS comprobacion
-      run: kubectl rollout status deployment/frontend-tienda-pod
 
