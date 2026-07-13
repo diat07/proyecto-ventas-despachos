@@ -3,12 +3,13 @@ kind: Service
 metadata:
   name: frontend-service
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: frontend-tienda-pod
   ports:
     - port: 8006
       targetPort: 8080
+      nodePort: 32000
 ---
 
 apiVersion: apps/v1
