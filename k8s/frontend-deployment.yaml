@@ -7,8 +7,8 @@ spec:
   selector:
     app: frontend-tienda-pod
   ports:
-    - port: 80
-      targetPort: 5173
+    - port: 8006
+      targetPort: 8080
 ---
 
 apiVersion: apps/v1
@@ -30,4 +30,4 @@ spec:
           image: 179885810108.dkr.ecr.us-east-1.amazonaws.com/frontend_ventas
           imagePullPolicy: Always
           ports:
-            - containerPort: 5173
+            - containerPort: 8080
