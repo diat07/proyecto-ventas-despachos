@@ -1,33 +1,30 @@
 # =========================
-# ETAPA 1: Build con Maven
+# ETAPA 1: Build con Maven (Corregida sin Wrapper)
 # =========================
 FROM maven:3.9.9-eclipse-temurin-17 AS build
 
 WORKDIR /app
 
+# Copiamos el pom.xml para descargar las dependencias usando el maven global
 COPY pom.xml .
-COPY .mvn .mvn
-COPY mvnw .
-COPY mvnw.cmd .
 
-RUN chmod +x mvnw
+# Descarga las dependencias en caché (reemplaza a go-offline del wrapper)
+RUN mvn dependency:resolve-plugins dependency:go-offline -B
 
-RUN ./mvnw dependency:go-offline -B
-
+# Copiamos el código fuente
 COPY src ./src
 
-RUN ./mvnw clean package -DskipTests
-
+# Compilamos usando el comando 'mvn' global en lugar de './mvnw'
+RUN mvn clean package -DskipTests
 
 # =========================
-# ETAPA 2: Runtime Java
+# ETAPA 2: Runtime Java (Se queda igual, solo corregimos el 'AS')
 # =========================
-FROM alpine:3.19 as runtime
+FROM alpine:3.19 AS runtime
 
 WORKDIR /app
 
 RUN apk add --no-cache openjdk17-jre-headless
-
 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
