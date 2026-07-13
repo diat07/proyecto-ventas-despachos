@@ -26,6 +26,6 @@ spec:
     spec:
       containers:
         - name: backend-despachos-cont
-          image: 179885810108.dkr.ecr.us-east-1.amazonaws.com/tienda-backend-despachos:eks-v1
+          image: 179885810108.dkr.ecr.us-east-1.amazonaws.com/backend_despacho
           ports:
             - containerPort: 8081

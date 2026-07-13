@@ -26,6 +26,6 @@ spec:
     spec:
       containers:
         - name: frontend-tienda-cont
-          image: 179885810108.dkr.ecr.us-east-1.amazonaws.com/tienda-frontend-ventas:eks-v1
+          image: 179885810108.dkr.ecr.us-east-1.amazonaws.com/frontend_ventas
           ports:
             - containerPort: 5173
