@@ -27,5 +27,6 @@ spec:
       containers:
         - name: backend-ventas-cont
           image: 179885810108.dkr.ecr.us-east-1.amazonaws.com/backend_ventas
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
