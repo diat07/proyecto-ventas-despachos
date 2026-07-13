@@ -22,7 +22,6 @@ RUN mvn clean package -DskipTests
 # =========================
 # ETAPA 2: Runtime Java Ligero (Alpine Puro - ¡Soporta Multi-plataforma!)
 # =========================
-# Usamos Alpine puro como base, el cual tiene soporte nativo perfecto para ARM64 y AMD64
 FROM alpine:3.19 AS runtime
 
 WORKDIR /app
